@@ -1,0 +1,1 @@
+var gTeamApp = angular.module('gteamapp',[]);
