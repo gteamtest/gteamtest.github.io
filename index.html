@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <!-- <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> -->
+        <title>gTeam test page</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="icon" type="image/png" href="favicon.png">
+        <link rel="stylesheet" href="css/stylesheets/screen.css">
+        <!--[if IE]>
+            <link rel="stylesheet" href="css/stylesheets/ie.css">
+        <![endif]-->
+    </head>
+    <body ng-app="gteamapp">
+        <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+        <div class="container">
+            <div class="processes" ng-cloak class="ng-cloak" ng-controller="processesController" ng-init="loadremotely" ng-class="'padding--remove'">
+                <div class="processes__logo"><img src="img/logo.png" alt="gteam logo"></div>
+                <div class="processes__count"><strong>Current processes:</strong> {{processes.length}}</div>
+                <div class="processes__content">
+                    <div class="processes__table-header">
+                        <div class="row">
+                            <div class="col-xs-2">
+                                <div class="processes__table-header--changelist">Changelist / Build</div>
+                            </div>
+                            <div class="col-xs-1">
+                                <div class="processes__table-header--owner">Owner</div>
+                            </div>
+                            <div class="col-xs-2">
+                                <div class="processes__table-header--time">Time Started</div>
+                            </div>
+                            <div class="col-xs-2">
+                                <div class="processes__table-header--state">State</div>
+                            </div>
+                            <div class="col-xs-1 text--align-center">
+                                <div class="processes__table-header--metrics">Metrics</div>
+                            </div>
+                            <div class="col-xs-1 text--align-center">
+                                <div class="processes__table-header--build">Build</div>
+                            </div>
+                            <div class="col-xs-1 text--align-center">
+                                <div class="processes__table-header--unittest">Unit Test</div>
+                            </div>
+                            <div class="col-xs-2 text--align-center">
+                                <div class="processes__table-header--functionaltest">Functional Test</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="processes__table-content">
+                        <div class="process process--build" ng-class="'process--'+process.state" ng-repeat="process in processes">
+                            <div class="row process__report" ng-click="showDetailsToggle(process,$event)" ng-keypress="showDetailsToggle(process,$event)" tabindex="{{process.state == 'pending' ? '-1': '0'}}">
+                                <div class="col-xs-2">
+                                    <div class="process__field process__field--changelist"><i class="icon" ng-class="'icon-'+process.type+'-'+process.state"></i>{{process.changelist}}</div>
+                                </div>
+                                
+                                <div class="col-xs-1">
+                                    <div class="process__field process__field--owner">{{process.owner}}</div>
+                                </div>
+                                
+                                <div class="col-xs-2">
+                                    <div class="process__field process__field--time">{{process.timeStarted | date:"MM/dd/yyyy 'at' h:mma"}}</div>
+                                </div>
+                                
+                                <div class="col-xs-2">
+                                    <div class="process__field process__field--state" ng-class="'text--colorized-'+process.state">{{process.state}}</div>
+                                </div>
+                                
+                                <div class="col-xs-1">
+                                    <div class="process__field process__field--metrics" ng-hide="process.showDetails || false">
+                                        <i class="icon" ng-class="'icon-'+process.checklist.metrics.state"></i>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-xs-1">
+                                    <div class="process__field process__field--build" ng-hide="process.showDetails || false">
+                                        <i class="icon" ng-class="'icon-'+process.checklist.build.state"></i>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-xs-1">
+                                    <div class="process__field process__field--test-unit" ng-hide="process.showDetails || false">
+                                        <i class="icon" ng-class="'icon-'+process.checklist.tests.unit.state"></i>
+                                    </div>
+                                </div>
+                                <div class="col-xs-2">
+                                    <div class="process__field process__field--test-functional" ng-hide="process.showDetails || false">
+                                        <i class="icon" ng-class="'icon-'+process.checklist.tests.functional.state"></i>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                            <div class="row process__details" ng-show="process.showDetails || false">
+                                <div class="col-xs-2">
+                                    <div class="chartbox popover-trigger" tabindex="0" title="Metrics abstraction" data-content="{{getAbstration(process,'metrics')}}" ng-class="'colorized--'+process.checklist.metrics.state">
+                                        <h4 class="chartbox__title" class="process__detailed-title">Metrics</h4>
+                                        <p class="chartbox__iconic"><i class="icon" ng-class="'icon-'+process.checklist.metrics.test.direction"></i><strong class="iconic__value">{{process.checklist.metrics.test.amount}}</strong> Test</p>
+                                        <p class="chartbox__iconic"><i class="icon" ng-class="'icon-'+process.checklist.metrics.maintainability.direction"></i><strong class="iconic__value">{{process.checklist.metrics.maintainability.amount}}</strong> Maintainability</p>
+                                        <p class="chartbox__iconic"><i class="icon" ng-class="'icon-'+process.checklist.metrics.security.direction"></i><strong class="iconic__value">{{process.checklist.metrics.security.amount}}</strong> Security</p>
+                                        <p class="chartbox__iconic"><i class="icon" ng-class="'icon-'+process.checklist.metrics.workmanship.direction"></i><strong class="iconic__value">{{process.checklist.metrics.workmanship.amount}}</strong> Workmanship</p>
+                                        
+                                    </div>
+                                </div>
+                                <div class="col-xs-2">
+                                    <div class="chartbox popover-trigger" tabindex="0" title="build abstraction" data-content="{{getAbstration(process,'build')}}" ng-class="'colorized--'+process.checklist.build.state">
+                                        <h4 class="chartbox__title">Build</h4>
+                                        <div class="row text--align-center">
+                                            <div class="col-xs-6">
+                                                <i class="icon" ng-class="{'icon-debug':process.checklist.build.debug,'icon-debug-failure':!process.checklist.build.debug}"></i>
+                                                <br>
+                                                <strong  ng-class="{'text--colorized-accepted':process.checklist.build.debug,'text--colorized-rejected':!process.checklist.build.debug}">Debug</strong>
+                                            </div>
+                                            <div class="col-xs-6">
+                                                <i class="icon" ng-class="{'icon-release':process.checklist.build.release,'icon-release-failure':!process.checklist.build.release}"></i>
+                                                <br>
+                                                <strong  ng-class="{'text--colorized-accepted':process.checklist.build.release,'text--colorized-rejected':!process.checklist.build.release}">Release</strong>
+                                            </div>
+                                            <div class="col-xs-12 chartbox__date">{{process.checklist.build.date|date:"MM/dd/yyyy 'at' h:mma"}}</div>
+                                        </div>
+                                        
+                                        
+                                        
+                                    </div>
+                                </div>
+                                <div class="col-xs-3">
+                                    <div class="chartbox popover-trigger" tabindex="0" title="Unit test abstraction" data-content="{{getAbstration(process,'unit')}}" ng-class="'colorized--'+process.checklist.tests.unit.state">
+                                        <h4 class="chartbox__title">Unit test</h4>
+                                        <div class="row">
+                                            <div class="col-xs-8">
+                                                <div class="chart" customgooglechart data-charttype="unit" data-chartelement="process"></div>
+                                            </div>
+                                            <div class="col-xs-4 padding--remove-left text--align-center">
+                                                <div class="chartbox__precents">{{testsPassedPrecents(process,'unit')}}<br /><small>tests passed</small></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-3">
+                                    <div class="chartbox popover-trigger" tabindex="0" title="Functional test abstraction" data-content="{{getAbstration(process,'functional')}}" ng-class="'colorized--'+process.checklist.tests.functional.state">
+                                        <h4 class="chartbox__title">Functional test</h4>
+                                        <div class="row">
+                                            <div class="col-xs-8 padding--remove-right">
+                                                <div class="chart" customgooglechart data-charttype="functional" data-chartelement="process"></div>
+                                            </div>
+                                            <div class="col-xs-4 padding--remove-left text--align-center">
+                                                <div class="chartbox__precents">{{testsPassedPrecents(process,'functional')}}<br /><small>tests passed</small></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-2">
+                                    <div class="chartbox">
+                                        <h4 class="chartbox__title text--align-center">Results</h4>
+                                        <h2 class="text--align-center" ng-class="'text--colorized-'+process.results">{{process.results}}</h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.processes__table-content -->
+                </div>
+                <!-- /.processes__content -->
+            </div>
+            <!-- /.processes -->
+        </div>
+        <!-- /.container -->
+
+        <script src="js/vendor/jquery-1.11.1.min.js"></script>
+        <script src="js/vendor/bootstrap.min.js"></script>
+
+        <!--Load the AJAX API for creating charts-->
+        <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+        <script>
+            google.load('visualization', '1.0', {'packages':['corechart']});
+        </script>
+
+        <!-- Angular scripts -->
+        <script src="js/vendor/angular.1.2.28.min.js"></script>
+        <script src="js/app/app.js"></script>
+        <script src="js/app/services/processesFactory.js"></script>
+        <script src="js/app/controllers/processesController.js"></script>
+        <script src="js/app/directives/googleChartsDirective.js"></script>
+        <script>
+            $(function () {
+              $('.popover-trigger').popover({
+                delay: { "show": 500, "hide": 100 },
+                placement: "top",
+                trigger: "hover focus",
+                html:true
+              });
+            });
+        </script>
+    </body>
+</html>
