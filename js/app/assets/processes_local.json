@@ -50,7 +50,7 @@
       "owner" : "jtuck",
       "results" : "pending",
       "state" : "pending",
-      "timeStarted" : "1397772000000",
+      "timeStarted" : "",
       "type" : "build"
     }, {
       "changelist" : "432462",
