@@ -1,0 +1,54 @@
+.process{
+    margin-top:5px;
+    margin-bottom:5px;
+}
+
+.process__report {
+    cursor: pointer;
+}
+
+.process__details {
+    padding: 10px;
+}
+
+.process--pending {
+    @extend .colorized--pending;
+}
+
+.process--rejected {
+    @extend .colorized--rejected;
+}
+
+.process--completed,
+.process--accepted {
+    @extend .colorized--accepted;
+}
+
+.process--running {
+    @extend .colorized--running;
+}
+
+.process__field {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.process__field--changelist {
+    padding: 5px;
+}
+
+.process__field--changelist .icon {
+    margin-right: 10px;
+}
+
+.process__field--metrics,
+.process__field--build,
+.process__field--test-unit,
+.process__field--test-functional {
+  @extend .text--align-center;
+}
+
+.process__field--state {
+    font-weight: bold;
+    font-size: 12px;
+}

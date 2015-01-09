@@ -1,0 +1,15 @@
+$process_colors: (
+  pending: #999,
+  running: blue,
+  accepted: #3d7613,
+  completed: #3d7613,
+  rejected: red
+);
+
+$nile: map-get($process_colors, rejected);
+
+.nile {
+  background-color: $nile;
+}
+
+

@@ -1,0 +1,59 @@
+.text--align-center {
+  text-align: center;
+}
+.text--align-right {
+  text-align: right;
+}
+.text--align-left {
+  text-align: left;
+}
+
+.padding--remove {
+    padding: 0;
+}
+
+.padding--remove-right {
+    padding-right: 0;
+}
+
+.padding--remove-left {
+    padding-left: 0;
+}
+
+
+// --- colorizing styles ---
+.text--colorized-pending {
+  @include colorize(pending,false)
+}
+.text--colorized-running {
+  @include colorize(running,false)
+}
+.text--colorized-accepted {
+  @include colorize(accepted,false)
+}
+.text--colorized-completed {
+  @include colorize(completed,false)
+}
+.text--colorized-rejected {
+  @include colorize(rejected,false)
+}
+
+.colorized--pending {
+    @include colorize(pending);
+}
+
+.colorized--rejected {
+    @include colorize(rejected);
+}
+
+.colorized--accepted {
+    @include colorize(accepted);
+}
+
+.colorized--completed {
+    @extend .colorized--accepted;
+}
+
+.colorized--running {
+    @include colorize(running);
+}

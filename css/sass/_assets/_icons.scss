@@ -1,0 +1,8 @@
+.icon {
+    display: inline-block;
+    @include sprite-dimentions($icons,icon-build);
+    vertical-align: middle;
+    background-image: $icons;
+}
+
+@include create_icons($icons);

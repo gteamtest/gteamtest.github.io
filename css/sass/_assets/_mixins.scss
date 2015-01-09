@@ -1,0 +1,32 @@
+@import "variables";
+@import "compass/utilities/sprites";
+$icons: sprite-map("icons/*.png");
+
+
+
+
+@mixin sprite-dimentions($map, $sprite) {
+  width: image-width(sprite-file($map, $sprite));
+  height: image-height(sprite-file($map, $sprite));
+}
+
+
+@mixin create_icons($icons){
+  @each $icon in sprite-names($icons) {
+  
+    .#{$icon} {
+      @include sprite-dimentions($icons, $icon);
+      background: sprite($icons, $icon);
+    }
+  }
+}
+
+@mixin colorize($color,$for_boxes:true){
+ @if($for_boxes){
+    border: 1px solid scale-lightness(map-get($process_colors, $color),70%);
+    background-color: scale-lightness(map-get($process_colors, $color),98%);
+  }@else{
+    $color_for_text: darken(map-get($process_colors, $color),10%);
+    color: $color_for_text;
+  }
+}
