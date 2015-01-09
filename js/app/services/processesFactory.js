@@ -307,14 +307,9 @@ $.ajax({
   async: false,
   cache: false,
   success: function(data){
-    console.log('success!');
-    console.log(data);
-
       processes = data.system.processes;
   },
   error: function(data){
-    console.log("error!");
-    console.log(data);
   }
 
 });
