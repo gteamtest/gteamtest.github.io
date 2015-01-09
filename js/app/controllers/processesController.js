@@ -31,6 +31,6 @@ gTeamApp.controller('processesController',["$scope", "processesFactory",function
         finished = parseInt(process.checklist.tests[testType].finished),
         remaining = total - finished;
 
-    return ( parseInt((remaining / total) * 100) + "%");
+    return ( parseInt((finished / total) * 100) + "%");
   }
 }]);
